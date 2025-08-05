@@ -1,3 +1,82 @@
+#' Curve equation
+#'
+#' @param x.y either "x" or "y"
+#' @param x1 x coord for first point
+#' @param y1 y coord for first point
+#' @param x2 x coord for second point
+#' @param y2 y coord for second point
+#' @param a a value of curve
+#'
+#' @return list(pos.function, neg.function)
+#' @export
+#'
+#' @examples
+#' curve.equation("y", 0, 0, 3, 3, 0.7)
+curve.equation <- function(x.y, x1, y1, x2, y2, a) {
+  b <- ((a*((x2^2)-(x1^2)))+y1-y2)/(x1-x2)
+  c <- (y1)-(((x1)^2)*(a))-((x1)*(((a*((x2^2)-(x1^2)))+y1-y2)/(x1-x2)))
+
+  if(x.y=="x"){
+    equation <- paste0("function(x) {((", a, "*(x^2))+(x*(", b, "))+(", c, "))}")
+    return(equation)
+  }else if(x.y=="y"){
+    pos.function <- paste0("function(y) {(-", b, "+sqrt((", b, "^2) + ((4*", a, ")*(-", c, "+y))))/(2*", a, ")}")
+    neg.function <- paste0("function(y) {-(", b, "+ sqrt((", b, "^2) - (4*", a, "*", c, ") + (4*", a, "*y)))/(2*", a, ")}")
+    return(list(pos.function, neg.function))
+  }
+}
+
+#' Slope
+#'
+#' @param point.1 coords of first point c(x, y)
+#' @param point.2 coords of second point c(x, y)
+#'
+#' @return slope
+#' @export
+#'
+#' @examples
+#' slope (c(0,3), c(9, 6))
+slope <- function(point.1, point.2){
+  return((point.1[2]-point.2[2])/(point.1[1]-point.2[1]))
+}
+
+
+#' Linear equation
+#' @description Creates a linear equation with the given information.
+#' Can provide x, y, and slope or y and equation
+#' linear.equation(y, equation) out:list(x, y)
+#' linear.equation(x, equation) out:
+#' list(x, y)
+#' linear.equation(x, y, slope) out:list(slope, b)
+#'
+#' @param x numeric
+#' @param y numeric
+#' @param slope numeric
+#' @param equation named list("slope"=numeric, "b"=numeric)
+#'
+#' @return varies
+#' @export
+#'
+#' @examples
+#' linear.equation(3, 9, 4/5)
+linear.equation <- function(x=NA, y=NA, slope=NA, equation=NA){
+  if(all(is.na(x), !is.na(y), class(equation)=="list")){
+    x <- ((y)-(equation$b))/(equation$slope)
+    return(list(x, y))
+  }else if(all(is.na(y), !is.na(x), class(equation)=="list")){
+    y <- (x*equation$slope)+(equation$b)
+    return(list(x, y))
+  }else if(all(class(equation)=="logical", !is.na(x), !is.na(y), !is.na(slope))){
+    b <- (y)-(x*slope)
+    equation <- list(slope, b)
+    names(equation) <- c("slope", "b")
+    return(equation)
+  }else{
+    return(list(x, y))
+  }
+}
+
+
 #' count.decimals
 #'
 #' @description Counts the number of decimal places in provided number.

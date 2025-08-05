@@ -1,0 +1,109 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# bqutils
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+bqutils is a collection of utility functions I use to minimize redundant code.
+
+## Installation
+
+The development version of bqutils is available for installation from [GitHub](https://github.com/) with:
+
+``` {r Installation}
+# install.packages("devtools")
+devtools::install_github("darkghastful/bqutils")
+```
+
+## Usage
+
+### Loading 
+
+```{r stats}
+library(bqutils)
+```
+
+### Numeric and Statistical 
+
+The following group of functions are for reporting and use of numeric and significance values.
+round.to rounds to the nearest provided value and can be changed to round either up or down depending on need
+
+### sigfill
+
+```{r sigfill}
+# Used to prep and properly format p-values
+sigfill(c(0.043, 0.0034), 2, TRUE)
+```
+
+```{r round to}
+round.to(0.00987, 0.001)
+round.to(0.00987, 0.001, "top")
+round.to(0.00987, 0.001, "bottom")
+```
+
+```{r count decimals}
+count.decimals(0.00987)
+```
+
+
+```{r remove replace}
+remove.na(list(NA, 1, NA, 2, 3))
+replace.na(list(NA, 1, NA, 2, 3), 0)
+replace.nan(c(NaN, 1, NaN, 2, 3), 0)
+replace.specific(c(1, 2, 3), 1, 3)
+```
+
+
+```{r frame}
+frame <- data.frame("a"=rep(1, 9), "b"=c(rep(1, 3), rep(2, 3), rep(3, 3)), "c"=1:9)
+count.n(frame, c("a", "b"))
+locate.element(frame, 1, "b")
+duplicated.values(frame[,"b"])
+uuln(frame[,"b"])
+uln(frame[,"b"])
+subset.object(frame, 1, "b")
+row.names.to.column(frame)
+```
+
+
+```{r Merge by overlap}
+frame <- data.frame("a"=rep(1, 9), "b"=c(rep(1, 3), rep(2, 3), rep(3, 3)), "c"=1:9)
+frame_2 <- data.frame(frame, "d"=rowSums(frame))
+merge.by.overlap(list(frame, frame_2))
+```
+
+
+```{r Two by two paired}
+frame <- data.frame("a"=c(3, 0.12, 0, 0, 0.001), "b"=c(0, 1, 0, 6, 9))
+two.by.two.paired(frame, "a", "b")
+```
+
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+
+```{r cars}
+summary(cars)
+```
+
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+
+You can also embed plots, for example:
+
+```{r pressure, echo = FALSE}
+plot(pressure)
+```
+
+In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
